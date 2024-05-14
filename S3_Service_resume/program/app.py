@@ -6,7 +6,7 @@ app = Flask(__name__)
 # AWS credentials and bucket name
 AWS_ACCESS_KEY_ID = '-------------'
 AWS_SECRET_ACCESS_KEY = '--------------'
-S3_BUCKET_NAME = 'webapp-bucket-resume'
+S3_BUCKET_NAME = '--------------'
 
 def format_user_details(user_details):
     # Split user details into lines
