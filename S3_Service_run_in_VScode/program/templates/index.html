@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Display Image from S3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        label.upload-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        label.upload-btn:hover {
+            background-color: #0056b3;
+        }
+        select {
+            padding: 10px;
+            width: calc(100% - 70px);
+            margin-right: 10px;
+        }
+        button.display-btn {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button.display-btn:hover {
+            background-color: #218838;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload and Display Image from S3</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" id="fileInput" accept="image/*" required>
+            <label for="fileInput" class="upload-btn">Choose Image</label>
+            <button type="submit" class="upload-btn">Upload</button>
+        </form>
+
+        <h2>Uploaded Images</h2>
+        <div>
+            <select id="imageSelect">
+                <option value="">Select an image</option>
+                {% for image in images %}
+                <option value="{{ image.url }}">{{ image.name }}</option>
+                {% endfor %}
+            </select>
+            <button onclick="displayImage()" class="display-btn">Display</button>
+        </div>
+
+        <div id="displayedImage"></div>
+    </div>
+
+    <script>
+        function displayImage() {
+            const select = document.getElementById("imageSelect");
+            const imageDiv = document.getElementById("displayedImage");
+            const selectedUrl = select.options[select.selectedIndex].value;
+            if (selectedUrl) {
+                imageDiv.innerHTML = `<img src="${selectedUrl}" alt="Selected Image">`;
+            } else {
+                imageDiv.innerHTML = "";
+            }
+        }
+    </script>
+</body>
+</html>
