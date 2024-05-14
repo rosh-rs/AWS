@@ -6,10 +6,10 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 # AWS S3 configurations
-S3_BUCKET = 'webapp-bucket-text'
+S3_BUCKET = '-----------'
 S3_ACCESS_KEY = '---------'
 S3_SECRET_KEY = '---------'
-S3_REGION = 'us-east-1'
+S3_REGION = '-----------'
 
 # Configure boto3 to connect to S3
 s3 = boto3.client(
