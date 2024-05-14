@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Submission</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            resize: none;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        .additional-input {
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"],
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover,
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        button {
+            background-color: #f44336;
+        }
+
+        button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Submit Your Resume</h1>
+        <form id="resumeForm" action="/submit/email" method="post">
+            <label for="full_name">Full Name:</label><br>
+            <input type="text" id="full_name" name="full_name"><br>
+            <label for="address">Address:</label><br>
+            <textarea id="address" name="address"></textarea><br>
+            <label for="phone_number">Phone Number:</label><br>
+            <input type="text" id="phone_number" name="phone_number"><br>
+            <label for="email">Email Address:</label><br>
+            <input type="email" id="email" name="email"><br>
+            <label for="objective">Objective:</label><br>
+            <textarea id="objective" name="objective"></textarea><br>
+            <div id="experienceContainer">
+                <label>Work Experience:</label><br>
+                <div class="experience">
+                    <label for="work_experience_year">Experience Year:</label><br>
+                    <input type="text" name="work_experience_year[]"><br>
+                    <label for="work_experience_details">Work Experience Details:</label><br>
+                    <textarea name="work_experience_details[]" class="additional-input"></textarea><br>
+                </div>
+            </div>
+            <button type="button" onclick="addExperience()">Add More Experience</button><br>
+            <label for="skills">Skills:</label><br>
+            <div id="skillsContainer">
+                <textarea class="additional-input" name="skills[]"></textarea><br>
+            </div>
+            <button type="button" onclick="addInput('skillsContainer', 'skills')">Add More</button><br>
+            <label for="certifications">Certifications:</label><br>
+            <div id="certificationsContainer">
+                <textarea class="additional-input" name="certifications[]"></textarea><br>
+            </div>
+            <button type="button" onclick="addInput('certificationsContainer', 'certifications')">Add More</button><br>
+            <label for="projects">Projects:</label><br>
+            <div id="projectsContainer">
+                <textarea class="additional-input" name="projects[]"></textarea><br>
+            </div>
+            <button type="button" onclick="addInput('projectsContainer', 'projects')">Add More</button><br>
+            <label for="college_name">College Name:</label><br>
+            <input type="text" id="college_name" name="college_name"><br>
+            <label for="college_year">Year of Passing:</label><br>
+            <input type="text" id="college_year" name="college_year"><br>
+            <label for="college_cgpa">CGPA:</label><br>
+            <input type="text" id="college_cgpa" name="college_cgpa"><br>
+            <label for="hsc_name">School Name (HSC):</label><br>
+            <input type="text" id="hsc_name" name="hsc_name"><br>
+            <label for="hsc_year">Year of Passing (HSC):</label><br>
+            <input type="text" id="hsc_year" name="hsc_year"><br>
+            <label for="hsc_percentage">Percentage (HSC):</label><br>
+            <input type="text" id="hsc_percentage" name="hsc_percentage"><br>
+            <label for="sslc_name">School Name (SSLC):</label><br>
+            <input type="text" id="sslc_name" name="sslc_name"><br>
+            <label for="sslc_year">Year of Passing (SSLC):</label><br>
+            <input type="text" id="sslc_year" name="sslc_year"><br>
+            <label for="sslc_percentage">Percentage (SSLC):</label><br>
+            <input type="text" id="sslc_percentage" name="sslc_percentage"><br>
+            <label for="hobbies">Hobbies:</label><br>
+            <div id="hobbiesContainer">
+                <textarea class="additional-input" name="hobbies[]"></textarea><br>
+            </div>
+            <button type="button" onclick="addInput('hobbiesContainer', 'hobbies')">Add More</button><br>
+            <input type="submit" class="button" value="Submit">
+        </form>
+
+        <form action="/download/email" method="get" style="display: inline-block;">
+            <label for="downloadEmail">Enter Email:</label>
+            <input type="email" id="downloadEmail" name="email">
+            <input type="submit" class="button" value="Download User Details">
+        </form>
+    </div>
+
+    <script>
+        function addInput(containerId, inputName) {
+            var container = document.getElementById(containerId);
+            var input = document.createElement('textarea');
+            input.className = 'additional-input';
+            input.setAttribute('name', inputName + '[]');
+            container.appendChild(input);
+        }
+
+        function addExperience() {
+            var container = document.getElementById('experienceContainer');
+            var experience = document.createElement('div');
+            experience.classList.add('experience');
+
+            var yearLabel = document.createElement('label');
+            yearLabel.textContent = 'Experience Year:';
+            var yearInput = document.createElement('input');
+            yearInput.setAttribute('type', 'text');
+            yearInput.setAttribute('name', 'work_experience_year[]');
+
+            var detailsLabel = document.createElement('label');
+            detailsLabel.textContent = 'Work Experience Details:';
+            var detailsInput = document.createElement('textarea');
+            detailsInput.classList.add('additional-input');
+            detailsInput.setAttribute('name', 'work_experience_details[]');
+
+            experience.appendChild(yearLabel);
+            experience.appendChild(document.createElement('br'));
+            experience.appendChild(yearInput);
+            experience.appendChild(document.createElement('br'));
+            experience.appendChild(detailsLabel);
+            experience.appendChild(document.createElement('br'));
+            experience.appendChild(detailsInput);
+
+            container.appendChild(experience);
+        }
+
+        document.getElementById("resumeForm").onsubmit = function() {
+            var email = document.getElementById("email").value;
+            var full_name = document.getElementById("full_name").value;
+            var phone_number = document.getElementById("phone_number").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/submit/" + email, true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            var formData = new FormData();
+            formData.append('full_name', full_name);
+            formData.append('address', document.getElementById("address").value);
+            formData.append('phone_number', phone_number);
+            formData.append('email', email);
+            formData.append('objective', document.getElementById("objective").value);
+            formData.append('work_experience_year', document.getElementById("work_experience_year").value);
+            formData.append('work_experience_details', document.getElementById("work_experience_details").value);
+            var skills = document.querySelectorAll('textarea[name="skills[]"]');
+            skills.forEach(function(skill) {
+                formData.append('skills[]', skill.value);
+            });
+            var certifications = document.querySelectorAll('textarea[name="certifications[]"]');
+            certifications.forEach(function(certification) {
+                formData.append('certifications[]', certification.value);
+            });
+            var projects = document.querySelectorAll('textarea[name="projects[]"]');
+            projects.forEach(function(project) {
+                formData.append('projects[]', project.value);
+            });
+            formData.append('college_name', document.getElementById("college_name").value);
+            formData.append('college_year', document.getElementById("college_year").value);
+            formData.append('college_cgpa', document.getElementById("college_cgpa").value);
+            formData.append('hsc_name', document.getElementById("hsc_name").value);
+            formData.append('hsc_year', document.getElementById("hsc_year").value);
+            formData.append('hsc_percentage', document.getElementById("hsc_percentage").value);
+            formData.append('sslc_name', document.getElementById("sslc_name").value);
+            formData.append('sslc_year', document.getElementById("sslc_year").value);
+            formData.append('sslc_percentage', document.getElementById("sslc_percentage").value);
+            var hobbies = document.querySelectorAll('textarea[name="hobbies[]"]');
+            hobbies.forEach(function(hobby) {
+                formData.append('hobbies[]', hobby.value);
+            });
+            xhr.send(new URLSearchParams(formData));
+            return false;
+        };
+
+        // document.getElementById("downloadButton").onclick = function() {
+        //     var email = document.getElementById("email").value;
+        //     var xhr = new XMLHttpRequest();
+        //     xhr.open("GET", "/download/" + email, true);
+        //     xhr.responseType = "blob";
+        //     xhr.onload = function() {
+        //         var blob = xhr.response;
+        //         var link = document.createElement("a");
+        //         link.href = window.URL.createObjectURL(blob);
+        //         link.download = "user_details.txt";
+        //         link.click();
+        //     };
+        //     xhr.send();
+        // };
+    </script>
+</body>
+</html>
